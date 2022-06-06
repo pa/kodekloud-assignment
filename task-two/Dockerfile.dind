@@ -1,0 +1,14 @@
+FROM cruizba/ubuntu-dind
+
+RUN apt-get update && apt-get install \
+    apparmor \
+    apparmor-utils
+
+COPY apparmor-profiles/ /etc/apparmor.d/
+
+RUN service apparmor restart
+
+RUN docker run -d --namae deny-all-writes-conatiner --security-opt "apparmor=deny-all-writes" ubuntu
+
+RUN docker run -d --namae audit-all-writes-conatiner --security-opt "apparmor=deny-all-writes" ubuntu
+
