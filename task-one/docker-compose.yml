@@ -9,7 +9,7 @@ x-logging:
 
 services:
   container-handler:
-    build: .
+    image: pramodhayyappan/kk-task-one-container-handler
     networks:
       - bridge
     volumes:

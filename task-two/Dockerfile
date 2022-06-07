@@ -1,10 +1,8 @@
 FROM docker
 
-COPY Dockerfile.dind /app/
+COPY apparmor-profiles /app/apparmor-profiles
 
 COPY container-handler.sh /app/
-
-RUN docker build /app/Dockerfile.dind -t dind-with-apparmor
 
 RUN chmod +x /app/container-handler.sh
 

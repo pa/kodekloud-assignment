@@ -5,10 +5,10 @@ PRIVILEGED_CONTAINER_NAME="privileged"
 NON_PRIVILEGED_CONTAINER_NAME="non-privileged"
 
 # Run a command in a new priviliged container
-docker run -d --name $PRIVILEGED_CONTAINER_NAME --privileged=true ubuntu sleep infinity
+docker run -itd --name $PRIVILEGED_CONTAINER_NAME --privileged=true ubuntu /bin/bash
 
 # Run a command in a new non-priviliged container
-docker run -d --name $NON_PRIVILEGED_CONTAINER_NAME ubuntu sleep infinity
+docker run -itd --name $NON_PRIVILEGED_CONTAINER_NAME ubuntu /bin/bash
 
 # Function to kill privileged conatiner up on dcoker stack remove
 kill_containers() {
