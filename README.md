@@ -29,13 +29,13 @@ This repo contains solutions for two tasks,
     └── docker-compose.yml
 ```
 
-- [docker-compose.yml](docker-compose.yml) - Used to deploy docker swarm stack with two services (task one and task two) in a docker swarm cluster.
+- [docker-compose.yml](docker-compose.yml) - Used to deploy docker swarm stack with two services ([task-one](task-one) and [task-two](task-two)) in a docker swarm cluster.
 - [task-one](task-one)
   - [Dockerfile](task-one/Dockerfile) - Copies [container-handler](task-one/container-handler.sh) script into the filesystem of the container and execute it within the container
   - [README.md](task-one/README.md) - Contains instructions to build image and deploy docker swarm stack in swarm cluster
   - [arch_diagram.png](task-one/arch_diagram.png) - Architecture diagram for task one docker swarm stack
   - [container-handler.sh](task-one/container-handler.sh) - Creates two sibiling containers, one with  `priviliged` mode enabled. Also waits for `docker stack rm <stack_name>` signal and kills the sibiling when `SIGTERM` is received
-  - [docker-compose.yml](task-one/docker-compose.yml) - It has one service and uses an existing network to deploy `container-handler` conatiner to bring up sibiling containers, one with  `priviliged` mode enabled
+  - [docker-compose.yml](task-one/docker-compose.yml) - It has one service and uses an existing network to deploy `container-handler` container to bring up sibiling containers, one with  `priviliged` mode enabled
 - [task-two](task-two)
   - [Dockerfile](task-two/Dockerfile) - Copies [apparmor profiles](task-two/apparmor-profiles/) and [container-handler](task-two/container-handler.sh) script into the filesystem of the container and execute the script within container
   - [README.md](task-two/README.md) - Contains instructions to build image and deploy docker swarm stack in swarm cluster
@@ -43,12 +43,12 @@ This repo contains solutions for two tasks,
     - [audit-all-writes](task-two/apparmor-profiles/audit-all-writes) - This profile will audit all the writes `(i.e creating dirs/files)` happening within the container and logs it to the kernel log
     - [deny-all-writes](task-two/apparmor-profiles/deny-all-writes) - This profile will deny all the writes `(i.e creating dirs/files)` happening within the container and logs it to the kernel log
   - [arch_diagram.png](task-two/arch_diagram.png) - Architecture diagram for task two docker swarm stack
-  - [container-handler.sh](task-two/container-handler.sh) - Creates one sibiling upper containers with  `priviliged` mode, updates/installs apparmor packages, copies apparmor profiles to `/etc/apparmo.d/` in the upper container, creates two child inner conatiner with apparmor profiles applied. Also waits for `docker stack rm <stack_name>` signal and kills the sibiling upper conatiner `(including child inner containers)` when `SIGTERM` is received
-  - [docker-compose.yml](task-two/docker-compose.yml) - It has one service and uses an existing network to deploy `container-handler` conatiner to bring up sibiling upper container with  `priviliged` mode enabled and two child inner container
+  - [container-handler.sh](task-two/container-handler.sh) - Creates one sibiling upper containers with  `priviliged` mode, updates/installs apparmor packages, copies apparmor profiles to `/etc/apparmo.d/` in the upper container, creates two child inner containers with apparmor profiles applied. Also waits for `docker stack rm <stack_name>` signal and kills the sibiling upper container `(including child inner containers)` when `SIGTERM` is received
+  - [docker-compose.yml](task-two/docker-compose.yml) - It has one service and uses an existing network to deploy `container-handler` container to bring up sibiling upper container with  `priviliged` mode enabled and two child inner containers
 
-## Deploy tasks to Swarm Cluster
+## Deploy [task-one](task-one) and [task-two](task-two) to Swarm Cluster
 
-In this section we will be deploying both the tasks [task-one](task-one) and [task-two](task-two) in swarm cluster using a single [docker-compose](docker-compose.yml) file. We can deploy this stack to any cloud platform or even a local dev machine. For this deployment I'm going to use AWS Cloud.
+In this section, we will be deploying both the tasks [task-one](task-one) and [task-two](task-two) in swarm cluster using a single [docker-compose](docker-compose.yml) file. We can deploy this stack to any cloud platform or even a local machine (with docker installed). For this deployment I'm going to use AWS Cloud platform.
 
 ### Pre-requisites
 
@@ -57,27 +57,26 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
 - Task one service image - You can either build image using [Dockerfile](task-one/Dockerfile) (_if you also want to use custom image name and tag, make sure to change the same in [docker-compose.yml](docker-compose.yml#L12)_) or you can use my docker image in [pramodhayyappan/kk-task-one-container-handler](https://hub.docker.com/repository/docker/pramodhayyappan/kk-task-one-container-handler) in dockerhub
 
     ```bash
-    # To build image with custom name and tag. By deafult it use latest tag
+    # To build image with custom name and tag. By default, it uses the latest tag
     docker build -f task-one/Dockerfile task-one -t pramodhayyappan/kk-task-one-container-handler:<tag name>
     ```
 
 - Task two service image - You can either build image using [Dockerfile](task-one/Dockerfile) (_if you also want to use custom image name, make sure to change the same image name in [docker-compose.yml](docker-compose.yml#L23)_) or you can use my docker image in [pramodhayyappan/kk-task-two-container-handler](https://hub.docker.com/repository/docker/pramodhayyappan/kk-task-two-container-handler) in dockerhub
 
     ```bash
-    # To build image with custom name and tag. By deafult it use latest tag
+    # To build image with custom name and tag. By default, it uses the latest tag
     docker build -f task-two/Dockerfile task-two -t pramodhayyappan/kk-task-two-container-handler:<tag name>
     ```
 
 #### Cloud Infra deployment
 
-- Assuming that you already have set up aws credentials in local machine
-- Create Security Group to allow communication between nodes and make note of the sg name
+- Assuming that you have already set up your AWS Credentials in your local machine, create a Security Group(SG) to allow communication between nodes and make note of the SG name
 
     ```bash
     aws ec2 create-security-group --group-name swarm-cluster-sg --description "swarm cluster security group" --vpc-id <vpc-id>
     ```
 
-- Create ingress rules to protocols and ports mentioned in [offical doc](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts)
+- Create ingress rules with the protocols and ports mentioned in the [offical doc](https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts)
 
     ```bash
     aws ec2 authorize-security-group-ingress --group-id <sg name from previous step> --protocol tcp --port 22 --cidr <cidr ip>
@@ -117,19 +116,19 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
     aws ec2 run-instances --image-id <ami-id> --count 1 --instance-type t2.xlarge --key-name <key-pair-name> --security-group-ids <sg name from first step> --subnet-id <subnet-id> --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=WorkerNode1}]' --user-data file://user-data.sh
     ```
 
-- Our infra structure is ready with docker installed
+- The infrastructure for docker swarm cluster with docker installed is ready
 
 ### Deploy docker stack
 
 #### Stack deployment
 
-- Create a swarm cluster by executing below command in manager node
+- Create a swarm cluster by executing the below command in manager node
 
     ```bash
     docker swarm init --advertise-addr <MANAGER-IP>
     ```
 
-- Join worker node to the cluster by using the command from the output of init command or use `join-token` command to generate join command. The command will look like
+- Join worker node to the cluster by using the output of the init command or use `join-token` to generate the join command. The command will look like
 
     ```bash
     docker swarm join-token worker
@@ -150,7 +149,7 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
     docker stack deploy --compose-file docker-compose.yml <stack-name>
     ```
 
-- Stack got deployed, some useful commands to list stack, services, container and inspect container
+- Some useful commands to list stack, services, container and inspect container
 
     ```bash
     # To list docker stacks
@@ -163,14 +162,17 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
     docker ps
 
     # to inspect docker container
-    docker inspect <conatiner id or name>
+    docker inspect <container id or name>
 
-    # # runs a new command on a running container
-    docker exec -it <conatiner id or name> <bash or shell>
+    # runs a new command on a running container
+    docker exec -it <container id or name> <bash or shell>
+
+    # to remove a docker stack
+    docker stack rm <stack-name>
     ```
 
 #### Demo
 
-The demo of docker stack deployment and testing each tasks functionality
+Demonstration and Testing of docker stack deployment
 
 [![asciicast](https://asciinema.org/a/500320.svg)](https://asciinema.org/a/500320)

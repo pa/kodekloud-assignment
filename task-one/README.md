@@ -13,13 +13,13 @@ i.e: `docker stack rm <stack_name>` should remove the service (including the pri
 
 ### Pre-requisites
 
-- Create custom docker image using [Dockerfile](Dockerfile) or use the image [pramodhayyappan/kk-task-one-container-handler](https://hub.docker.com/repository/docker/pramodhayyappan/kk-task-one-container-handler) dockerhub in the [docker-compose.yml](docker-compose.yml#12)
+- Create a custom docker image using [Dockerfile](Dockerfile) or use the image [pramodhayyappan/kk-task-one-container-handler](https://hub.docker.com/repository/docker/pramodhayyappan/kk-task-one-container-handler) from dockerhub in the [docker-compose.yml](docker-compose.yml#L12)
 
     ```bash
     docker build . -t pramodhayyappan/kk-task-one-container-handler
     ```
 
-- To deploy docker stack, we need a docker swarm cluster, refer to the main README to bring up [new nodes](../README.md#cloud-infra-deployment) and create a [swarm cluster](../README.md##stack-deployment)
+- To deploy docker stack, we need a docker swarm cluster, refer to the main README to bring up [new nodes](../README.md#cloud-infra-deployment) and create a [swarm cluster](../README.md#stack-deployment)
 
 ### Stack deployment
 
@@ -75,12 +75,12 @@ a55b11424f91   ubuntu                                                 "/bin/bash
 3291c1166b0e   ubuntu                                                 "/bin/bash"              7 minutes ago   Up 7 minutes             privileged
 713c145663d6   pramodhayyappan/kk-task-one-container-handler:latest   "docker-entrypoint.s…"   7 minutes ago   Up 7 minutes             task-one-stack_container-handler.hqwvw8oagbqgca2u0nsd33q9h.wl7df04kwoq35n2c047wge512
 
-# login to non-privileged conatiner and try to mount temporary filesystem from with in container
+# login to non-privileged conatiner and try to mount temporary filesystem from with in the container
 ubuntu@manager:~/kodekloud-assignment/task-one$ docker exec -it non-privileged /bin/bash
 root@a55b11424f91:/# mount -t tmpfs none /mnt
 mount: /mnt: permission denied.
 
-# login to privileged conatiner and try to mount temporary filesystem from with in container
+# login to privileged conatiner and try to mount temporary filesystem from with in the container
 ubuntu@manager:~/kodekloud-assignment/task-one$ docker exec -it privileged /bin/bash
 root@3291c1166b0e:/# mount -t tmpfs none /mnt
 root@3291c1166b0e:/# df -h
@@ -100,9 +100,8 @@ ubuntu@manager:~/kodekloud-assignment/task-one$ docker stack ls
 NAME      SERVICES   ORCHESTRATOR
 ubuntu@manager:~/kodekloud-assignment/task-one$
 
-# list docker containers to see if priviliged container got removed after docker stack remove
+# list docker containers to see if priviliged container as well got removed
 ubuntu@manager:~/kodekloud-assignment/task-one$ docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ubuntu@manager:~/kodekloud-assignment/task-one$
-
 ```
