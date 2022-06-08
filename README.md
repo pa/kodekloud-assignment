@@ -70,7 +70,7 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
 
 #### Cloud Infra deployment
 
-- Set up aws profile or export credentials in your local machine
+- Assuming that you already have set up aws credentials in local machine
 - Create Security Group to allow communication between nodes and make note of the sg name
 
     ```bash
@@ -103,7 +103,7 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+    sudo apt-get install docker-ce docker-ce-cli containerd.io  docker-compose-plugin git -y
     sudo groupadd docker
     sudo usermod -aG docker $USER
     newgrp docker
@@ -118,3 +118,57 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
     ```
 
 - Our infra structure is ready with docker installed
+
+### Deploy docker stack
+
+#### deploy stack
+
+- Create a swarm cluster by executing below command in manager node
+
+    ```bash
+    docker swarm init --advertise-addr <MANAGER-IP>
+    ```
+
+- Join worker node to the cluster by using the command from the output of init command or use `join-token` command to generate join command. The command will look like
+
+    ```bash
+    docker swarm join-token worker
+    docker swarm join --token <token> <ip>:<port>
+    ```
+
+- Clone this repo to the manager node
+
+    ```bash
+    git clone https://github.com/pa/kodekloud-assignment.git
+
+    cd kodekloud-assignment
+    ```
+
+- Deploy docker stack
+
+    ```bash
+    docker stack deploy --compose-file docker-compose.yml <stack-name>
+    ```
+
+- Stack got deployed, some useful commands to list stack, services, container and inspect container
+
+    ```bash
+    # To list docker stacks
+    docker stack ls
+
+    # To list services deployed by stack
+    docker stack services <stack-name>
+
+    # To list docker containers
+    docker ps
+
+    # to inspect docker container
+    docker inspect <conatiner id or name>
+
+    # # runs a new command on a running container
+    docker exec -it <conatiner id or name> <bash or shell>
+    ```
+
+#### Demo
+
+The demo of docker stack deployment and testing each tasks functionality
