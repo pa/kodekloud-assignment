@@ -48,9 +48,9 @@ This repo contains solutions for two tasks,
 
 ## Deploy tasks to Swarm Cluster
 
-In this section we will be deploying both the tasks [task-one](task-one) and [task-two](task-two) in swarm cluster using a single [docker-compose](docker-compose.yml) file. We can deploy this stack to any cloud platform or even a local dev linux machine. For this deployment I'm going to use AWS Cloud.
+In this section we will be deploying both the tasks [task-one](task-one) and [task-two](task-two) in swarm cluster using a single [docker-compose](docker-compose.yml) file. We can deploy this stack to any cloud platform or even a local dev machine. For this deployment I'm going to use AWS Cloud.
 
-### Pre-requisite
+### Pre-requisites
 
 #### Docker Images
 
@@ -121,7 +121,7 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
 
 ### Deploy docker stack
 
-#### deploy stack
+#### Deploy stack
 
 - Create a swarm cluster by executing below command in manager node
 
@@ -172,3 +172,5 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
 #### Demo
 
 The demo of docker stack deployment and testing each tasks functionality
+
+[![asciicast](https://asciinema.org/a/500320.svg)](https://asciinema.org/a/500320)
