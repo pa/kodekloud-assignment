@@ -121,7 +121,7 @@ In this section we will be deploying both the tasks [task-one](task-one) and [ta
 
 ### Deploy docker stack
 
-#### Deploy stack
+#### Stack deployment
 
 - Create a swarm cluster by executing below command in manager node
 
