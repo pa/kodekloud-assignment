@@ -1,0 +1,25 @@
+version: '3.9'
+
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
+services:
+  container-handler:
+    image: pramodhayyappan/kk-task-two-container-handler
+    networks:
+      - bridge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+    stop_grace_period: 30s
+    logging: *default-logging
+
+networks:
+  bridge:
+    name: bridge
+    external: true
