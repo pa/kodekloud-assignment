@@ -87,13 +87,7 @@ root@a4c3ed20904b:/# mkdir hello-world-dir
 root@a4c3ed20904b:/#
 
 # Check kernel logs to see if apparmor audit logs are appeneded
-ubuntu@manager:~/kodekloud-assignment/task-two$ sudo dmesg | tail -10
-[12279.619629] audit: type=1400 audit(1654704872.695:83): apparmor="AUDIT" operation="mknod" profile="audit-all-writes" name="/test.txt" pid=13562 comm="touch" requested_mask="c" fsuid=0 ouid=0
-[12279.619680] audit: type=1400 audit(1654704872.695:84): apparmor="AUDIT" operation="open" profile="audit-all-writes" name="/test.txt" pid=13562 comm="touch" requested_mask="wc" fsuid=0 ouid=0
-[12279.620643] audit: type=1400 audit(1654704872.695:85): apparmor="AUDIT" operation="open" profile="audit-all-writes" name="/dev/tty" pid=13486 comm="bash" requested_mask="w" fsuid=0 ouid=0
-[12279.712853] audit: type=1400 audit(1654704872.787:86): apparmor="DENIED" operation="open" profile="deny-all-writes" name="/dev/tty" pid=13533 comm="bash" requested_mask="w" denied_mask="w" fsuid=0 ouid=0
-[12279.712901] audit: type=1400 audit(1654704872.787:87): apparmor="DENIED" operation="open" profile="deny-all-writes" name="/dev/pts/0" pid=13533 comm="bash" requested_mask="w" denied_mask="w" fsuid=0 ouid=0
-[12279.714071] audit: type=1400 audit(1654704872.787:88): apparmor="DENIED" operation="mknod" profile="deny-all-writes" name="/test.txt" pid=13574 comm="touch" requested_mask="c" denied_mask="c" fsuid=0 ouid=0
+ubuntu@manager:~/kodekloud-assignment/task-two$ sudo dmesg | tail -4
 [12279.715490] audit: type=1400 audit(1654704872.791:89): apparmor="DENIED" operation="open" profile="deny-all-writes" name="/dev/tty" pid=13533 comm="bash" requested_mask="w" denied_mask="w" fsuid=0 ouid=0
 [12279.715546] audit: type=1400 audit(1654704872.791:90): apparmor="DENIED" operation="open" profile="deny-all-writes" name="/dev/pts/0" pid=13533 comm="bash" requested_mask="w" denied_mask="w" fsuid=0 ouid=0
 [12544.168874] audit: type=1400 audit(1654705137.234:91): apparmor="DENIED" operation="mkdir" profile="deny-all-writes" name="/hello-world-dir/" pid=13792 comm="mkdir" requested_mask="c" denied_mask="c" fsuid=0 ouid=0
